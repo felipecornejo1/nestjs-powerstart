@@ -1,3 +1,4 @@
+import { IS_PUBLIC_KEY } from '@/common/decorators/public.decorator';
 import {
   CanActivate,
   ExecutionContext,
@@ -7,7 +8,6 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { IS_PUBLIC_KEY } from 'src/common/decorators/public.decorator';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
