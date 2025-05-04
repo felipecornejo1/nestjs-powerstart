@@ -13,17 +13,21 @@ import { CommonModule } from './common/common.module';
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         PORT: Joi.required(),
-        TEST_VAR_2: Joi.required(),
+        DB_NAME: Joi.required(),
+        DB_HOST: Joi.required(),
+        DB_PORT: Joi.number().required(),
+        DB_USERNAME: Joi.required(),
+        DB_PASSWORD: Joi.required(),
       }),
     }),
     CoffeesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'pass123',
-      database: 'postgres',
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT!,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       autoLoadEntities: true,
       synchronize: true,
     }),
@@ -32,12 +36,9 @@ import { CommonModule } from './common/common.module';
       pinoHttp: {
         level: process.env.LOG_LEVEL || 'debug',
         genReqId: function (req, res) {
-          console.log('here');
           const existingID = req.id ?? req.headers['x-request-id'];
-          console.log('existingId', existingID);
           if (existingID) return existingID;
           const id = crypto.randomUUID();
-          console.log('id', id);
           res.setHeader('X-Request-Id', id);
           return id;
         },
